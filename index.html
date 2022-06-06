@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R + Markdown: automatización desde   un mail a una tesis         </title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Richard Detomasi y Gabriela Mathieu " />
+    <script src="index_files/header-attrs/header-attrs.js"></script>
+    <link href="index_files/remark-css/default.css" rel="stylesheet" />
+    <link href="index_files/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="index_files/remark-css/rladies-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R + Markdown: automatización desde <br> un mail a una tesis<br><br>
+<img src="img_more/Rlogo.png" style="width:8.0%" />   <img
+src="img_more/RStudio-Logo-Flat.png" style="width:18.0%" />   <img
+src="img_more/rmarkdown.png" style="width:6.0%" />
+### Richard Detomasi y Gabriela Mathieu<br>
+### <span>&lt;style=‘font-size: 80%;’&gt; FCS - Educación Permanente
+<br> Taller: Documentos extensos <br><br>
+</style>
+</span> <img src="img_more/cc-by-sa.png" />
+
+---
+
+
+
+class: inverse, center, middle
+# Divide y reinarás...
+
+---
+# Documentos *child* 
+
+- Cuando un documento es muy extenso o complejo, la solución es partirlo en múltiples documentos denominados “child”.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Luego estos documentos *child* se combinan en un documento principal.
+&lt;br&gt;&lt;br&gt;
+--
+
+- En el documento principal va el YAML y se llama  a los documentos *child*.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Se recomienda hacer una carpeta para ir dejando los .rmd de los capítulos.
+&lt;br&gt;&lt;br&gt;
+--
+
+- A los documentos *child* se los llama con un *chunk* detallando el nombre del documento en el encabezado. En este ejemplo los *child* están en la carpeta "secciones":
+
+![](img_more/child.png)
+
+---
+class: inverse, center, middle
+# Referencias internas
+
+---
+# Citar elementos del documento
+
+Parte de la flexibilidad de estos documentos implica que cuando cambiamos el orden de las tablas, gráficos o secciones, las referencias a estos se mantengan.
+&lt;br&gt;&lt;br&gt;
+--
+
+Por lo que si tenemos un chunk que devuelve un gráfico o tabla, por ejemplo:
+
+![](img_more/ref.png)
+&lt;br&gt;&lt;br&gt;
+--
+
+Y luego en el texto lo referenciamos con: 
+
+&gt; ... en la figura \@ref(fig:nombre_chunk)
+
+o
+
+&gt; ... en la tabla \@ref(tab:nombre_chunk)
+
+---
+# Referenciar una sección
+
+Para referenciar una sección, tenemos que agregar una referencia con este formato:
+
+![](img_more/sec_ref.png)
+&lt;br&gt;&lt;br&gt;
+--
+
+Y luego llamarlo mediante: 
+
+
+&gt; ... retomando la sección \@ref(hipo) 
+
+
+---
+class: inverse, center, middle
+# Bibliografía y citas
+
+---
+# Bibliografía y citas
+
+__Especificaciones__
+
+
+- Se pueden generar automáticamente citas y una bibliografía en varios estilos. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Para utilizar esta función, deberá especificar un archivo de bibliografía utilizando el campo del encabezado del documento: `bibliography`, como se muestra en el siguiente ejemplo
+&lt;br&gt;&lt;br&gt;
+--
+
+
+```r
+---
+title: "Documento_prueba"    
+output: pdf_document    
+bibliography: bibliographia.bib
+---
+```
+
+---
+# Bibliografia
+
+La bibliografía puede estar en cualquiera de estos formatos:
+
+Formato |	Extensión
+-----------|--------------------
+MODS |	.mods
+BibLaTeX |	.bib
+BibTeX |	.bibtex
+RIS |	.ris
+EndNote |	.enl
+EndNote XML |	.xml
+ISI |	.wos
+MEDLINE |	.medline
+Copac |	.copac
+JSON citeproc |	.json
+
+
+* Notar que `.bib` puede ser usado tanto en archivos BibTeX como en BibLaTeX, pero si usas `.bibtex` hay que forzarlo para documentos BibTeX.
+
+---
+# Referencia
+
+Dentro del archivo de la bibliografía, cada referencia tiene un formato similar a este:
+
+
+```r
+@article{debarsy_2010,     
+   title = {Testing for spatial autocorrelation in a fixed effects panel data model},     
+   volume = {40},    
+   issn = {0166-0462},    
+   url = {`http://www.sciencedirect.com/science/article/pii/S0166046210000451`},    
+   doi = {10.1016/j.regsciurbeco.2010.06.001},    
+   abstract = {The aim of this paper is to assess the relevance of spatial autocorrelation in a fixed effects panel data model and in the affirmative, ...},    
+   pages = {453--470},    
+   number = {6},    
+   journaltitle = {Regional Science and Urban Economics},    
+   author = {Debarsy, Nicolas and Ertur, Cem},    
+   urldate = {2015-10-01},    
+   date = {2010-11},    
+   keywords = {Panel data, Spatial autocorrelation, Test statistics}    
+}
+```
+
+Dependiendo de la información que tengamos y del tipo de documento, tendrá más o menos ítems a detallar.
+
+--
+
+- El primer elemento es el alias a ese documento. En este caso *debarsy_2010*, es nombre de auto y año y será como lo citemos a lo largo del documento. 
+
+---
+# Gestores de referencias
+
+Hay varios gestores de referencia que se pueden usar:
+
+&lt;img src="img_more/zotero.jpg" width="300px" /&gt;
+&lt;img src="img_more/refworks.png" width="300px" /&gt;
+&lt;img src="img_more/mendeley.png" width="300px" /&gt;
+
+__Pero te recomendamos [`RefManageR`](https://cran.r-project.org/web/packages/RefManageR/RefManageR.pdf) directamente en `R`__
+
+---
+# Bibliografía
+
+- La bibliografía será ubicada al final del documento. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Podés especificar con que nombre querés que aparezca: Bibliografía, Referencias, etc.
+&lt;br&gt;&lt;br&gt;
+--
+
+&gt; `Bla bla bla.... último parrafo...`     
+&gt;         
+&gt; `# Referencias`
+
+---
+# Citas
+
+- Las citas van entre paréntesis rectos y se separan por `\(;\)`
+&lt;br&gt;&lt;br&gt;
+--
+
+- Cada cita tiene un identificador, compuesto por `\(@\)` y el alias que indicamos en el archivo de la bibliografía. Puede opcionalmente tener prefijos, u otros complementos. 
+&lt;br&gt;&lt;br&gt;
+--
+ 
+- Aquí algunos ejemplos:
+
+&gt; Blah blah [vea @debarsy_2010, pp. 33-35; o @smith04, ch. 1].
+&gt;
+&gt; Blah blah [@debarsy_2010, pp. 33-35, 38-39 y *passim*].
+&gt;
+&gt; Blah blah [@smith04; @debarsy_2010].
+
+---
+# Citas
+
+- Con un signo de menos `\(-\)` antes del `\(@\)` se puede omitir la mención de la autora o autor en la cita. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Esto es útil cuando la autora o el autor ya se encuentra mencionadx en el texto:
+
+&gt; Smith indica que blah [-@smith04].
+
+&lt;br&gt;&lt;br&gt;
+--
+
+- o usar una cita _in-text_, así:
+
+
+&gt; @smith04 hace referencia a blah.
+
+&lt;br&gt;&lt;br&gt;
+--
+
+- o 
+
+&gt; @smith04 [p. 33] propone blah.
+
+---
+# Referencias no usadas
+
+Si lo que se quiere es incluir un texto en la bibliografía sin realmente citarlo en el cuerpo del texto, puedes definir un campo `nocite` en la metadata y colocar ahí las citas correspondientes:
+
+
+
+```r
+---
+title: "Documento_prueba"    
+output: pdf_document    
+bibliography: bibliographia.bib
+nocite: |    
+  @item1, @item2  
+---
+
+... según @item3
+```
+
+
+
+En este ejemplo, el documento solo presentará la cita del `item3`, pero la bibliografía contendrá las entradas de todos (`item1`,`item2`, y `item3`).
+
+
+---
+# Estilos de citación
+
+- Por defecto, _pandoc_ usará el estilo _Chicago author-date_ para citas y referencias. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Para usar otros estilos, precisaremos un archivo específico de estilo (CSL 1.0) que tendrá la extensión `.csl` y tendrá que incorporarse en el preambulo o encabezado del documento. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Por ejemplo:
+
+
+
+```r
+---
+title: "Documento_prueba"    
+output: pdf_document    
+bibliography: bibliography.bib
+csl: biomed-central.csl
+link-citations: true #Mantiene hipervínculos de las citas
+---
+```
+
+
+- Para una primera aproximación a la creación y modificación de estilos en `CSL` se puede ver [esto](http://citationstyles.org/downloads/primer.html). Antes es necesario buscar en un repositorio de estilos CSL como el que podés encontrar en [GitHub](https://github.com/citation-style-language/styles). O descargalo directamente de un gestor de bibliografía como [Zotero](http://zotero.org/styles).
+
+---
+# Citas en documentos PDF
+
+A modo de resumen deberemos tener en nuestro directorio de trabajo algo similar a:
+
+![](img_more/arch_biblio.png) 
+
+- Las citas en R Markdown son generadas mediante la libreía `pandoc-citeproc`, y funciona para todos los formatos de salida.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Pero cuando la salida del documento es LaTeX/PDF, también es posible usar librerías propias de LaTeX (por ejemplo `natbib`) para generar las citas ([detalles](https://bookdown.org/yihui/rmarkdown/pdf-document.html)).
+
+
+---
+# Citar R y sus paquetes
+
+Existe una función `citation()` en **R** que brinda la información necesaria para citar tanto el paquete `Base` como todos los otros paquetes que usemos en nuestros procesamientos. 
+
+
+```r
+utils::citation()
+```
+
+```
+## 
+## To cite R in publications use:
+## 
+##   R Core Team (2021). R: A language and environment for statistical
+##   computing. R Foundation for Statistical Computing, Vienna, Austria.
+##   URL https://www.R-project.org/.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Manual{,
+##     title = {R: A Language and Environment for Statistical Computing},
+##     author = {{R Core Team}},
+##     organization = {R Foundation for Statistical Computing},
+##     address = {Vienna, Austria},
+##     year = {2021},
+##     url = {https://www.R-project.org/},
+##   }
+## 
+## We have invested a lot of time and effort in creating R, please cite it
+## when using it for data analysis. See also 'citation("pkgname")' for
+## citing R packages.
+```
+
+
+---
+# Citar R y sus paquetes
+
+- Si solo se proporciona una referencia, el método de impresión para el objeto devuelto por `citation()` muestra una versión de texto y una entrada de BibTeX, si un paquete tiene más de una referencia, solo se muestran las versiones de texto. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- La versión BibTeX puede obtenerse usando la función `toBibtex()`. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Por ejemplo
+
+
+```r
+x &lt;- utils::citation("ggplot2")
+toBibtex(x)
+```
+
+```
+## @Book{,
+##   author = {Hadley Wickham},
+##   title = {ggplot2: Elegant Graphics for Data Analysis},
+##   publisher = {Springer-Verlag New York},
+##   year = {2016},
+##   isbn = {978-3-319-24277-4},
+##   url = {https://ggplot2.tidyverse.org},
+## }
+```
+
+
+---
+# Errores al compilar citas
+
+Algunos tips para corregir errores al compilar documentos con citas:
+&lt;br&gt;&lt;br&gt;  
+--
+
+1) Probar setear el paquete de citas con el que se compila (`pandoc-citeproc`, `natbib` o `biblatex`)
+
+
+```r
+---
+title: "Reporte"
+output:
+  pdf_document:
+    citation_package: natbib
+---
+```
+&lt;br&gt;&lt;br&gt;  
+--
+2) Otro parámetro que puede influir sería el motor de compilación de \latex (`pdflatex`, `xelatex`o `lualatex`)
+
+
+```r
+---
+title: "Reporte"
+output:
+  pdf_document:
+    latex_engine: xelatex
+---
+```
+
+--
+- O una combinación de ambos... 
+
+---
+class: inverse, center, middle
+# LaTeX
+
+---
+# Opciones LaTeX
+
+[LaTeX](https://ctan.org/) es otro lenguaje que brinda más funcionalidades y suele combinarse con Markdown. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Es un programa diseñado para una composición de documentos de alta calidad tipográfica. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Combinado con Markdown brinda funcionalidades adicionales para el formato del documento.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Para habilitar el uso de LaTex hay que indicar en el preámbulo que paquetes vamos a usar. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- En este sentido funciona como R, las funciones se encuentran en paquetes.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Los comandos de Latex -funciones- van precedidos de una contrabarra: \\
+
+
+---
+# Idioma
+
+Para que los títulos predefinidos de ciertos elementos como índice (por defecto, Contents), tablas (por defecto, Table) y gráficos (por defecto, Figure) se impriman en español, debemos agregar en el encabezado del documento:
+
+```
+header-includes:
+- \usepackage[spanish, es-minimal]{babel}
+```
+&lt;br&gt;&lt;br&gt;
+--
+
+- Esto es código `LaTeX`, que llama al paquete `babel`.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Al compilar en vez de Contents mostrará Contenido, en vez de Table, mostrará Cuadro y en vez de Figure mostrará Figura. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Se puede cambiar este texto por lo que queramos, esto requiere otro poco de código LaTeX en el YAML.
+
+
+---
+# Paquetes LaTeX
+
+Paquete | Descripción
+-------------------| ----------------------------------------------------
+babel | usando la opción 'spanish' se traducen a español Chapter, Figure, etc.
+inputenc | opción 'latin1' en windows o 'utf8' en Linux permite escribir con acentos y ñ
+graphicx | permite controlar las imágenes incrustadas en el documento
+geometry | define los márgenes de la hoja
+footmisc | define el lugar de los pie de página
+xcolor | define colores en distintos modelos de color (rgb, cmy)
+subfigure | crea figuras compuestas por dos o más subfiguras, opcionalmente numeradas como (a) y (b)
+longtable | permite añadir tablas que excedan los márgenes de la página
+float | mejora la interfaz para definir objetos flotantes, como figuras y tablas.
+tabularx | permite crear tablas con un ancho específico
+booktabs | permite tres tipos de bordes horizontales para que las tablas se vean más prolijas
+
+---
+# Paquetes LaTeX
+
+Paquete | Descripción
+------------- | ----------------------------------------------------
+hyperref | permite añadir enlaces/hipervínculos a secciones del documento y de páginas webs
+emptypage | permite dejar sin numeración ni encabezados aquellas páginas que no tengan contenido
+multicol | permite unir columnas de una tabla
+multirow | permite unir filas de una tabla
+fancyhdr | permite personalizar los encabezados
+fncychap | cambia la apariencia de los encabezados de capítulo
+amsmath, amssymb, amsthm | permite incluir notaciones matemáticas
+rotating | para realizar todos los diferentes tipos de rotación que uno quiera, incluyendo figuras y tablas completas con sus títulos.
+
+[Para buscar otras funciones de LaTeX](https://ctan.org/search/?phrase=)
+
+
+---
+# Encabezado del documento
+
+Con todo lo visto hasta ahora tendremos un encabezado (YAML) con todos los parámetros para empezar nuestro documento. 
+
+
+```r
+---
+title: "Titulo"   
+author: "Nombre"  
+output:
+  pdf_document:    
+      fig_caption: yes    
+      fig_crop: no     
+      highlight: haddock     
+      keep_tex: yes     
+      numDerivber_sections: yes     
+classoption: a4paper     
+csl: harvard-kings-college-mvd.csl    
+bibliography: biblioteca.bib    
+fontsize: 12pt    
+geometry: margin = 1.2in     
+linkcolor: black    
+urlcolor: blue
+header-includes:
+- \usepackage[utf8]{inputenc}
+- \usepackage[spanish]{babel}
+- \usepackage{float} 
+- \usepackage{graphicx}
+---
+```
+
+---
+# Listas de contenido, figuras y tablas (PDF)
+
+Incorporando estas herramientas por ejemplo, se hace más sencillo ordenar las listas de contenidos...
+
+
+```r
+---    
+title: "Titulo"    
+author: "Nombre"   
+output:    
+    pdf_document:    
+    fig_caption: true    
+    number_sections: true 
+---    
+   
+\newpage # agrega una nueva página    
+\tableofcontents # agrega tabla de contenidos    
+\listoffigures # lista las figuras    
+\listoftables # lista las tablas   
+```
+
+---
+class: inverse, center, middle
+# Parametrizar
+
+---
+# Parametrizar documentos
+
+- Los documentos R Markdown pueden incluir uno o más parámetros cuyos valores se pueden establecer cuando se procesa el informe. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Por ejemplo, el archivo siguiente utiliza un parámetro de variable que determina qué variable será utlizada en el informe. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Los parametros son declarados usando el campo `params` dentro del preámbulo (YAML) al inicio del documento.
+&lt;br&gt;&lt;br&gt;
+--
+
+
+```r
+---
+title: "Documento_prueba"
+output: pdf_document    
+params:    
+   variable: "ingreso"
+   depto: "Montevideo"
+---
+```
+
+---
+# Usando Parámetros
+
+&lt;!-- # Usando Parametros (I) --&gt;
+
+- Los parámetros están disponibles dentro del entorno de `knitr` como una lista de solo lectura llamada `params`. Para acceder a un parámetro en el código, lo debemos llamar mediante ` params$&lt;nombre del parametro&gt;`
+&lt;br&gt;&lt;br&gt;
+--
+
+Aquí se analiza la variable 'r params$variable ' , que presenta una media de ' r  mean(base[,params$variable]) ' y ....
+&lt;br&gt;&lt;br&gt;
+--
+
+En el departamento de 'r params$depto' hay ' r  sum(base$departamento == params$dpto) ' casos ...
+
+
+---
+# Renderizando con otro parámetro
+
+- Si modificamos el argumento de params al renderizar el documento, se crea un informe que usa el nuevo conjunto de valores de parámetros.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Aquí modificamos nuestro informe para usar la variable "egresos":
+&lt;br&gt;&lt;br&gt;
+--
+
+
+```r
+render("informe.Rmd", params = list(variable = "egresos"))
+```
+
+---
+class: inverse, center, middle
+# Formatos
+
+---
+# mails desde R
+
+Con el paquete [blastula](https://www.rdocumentation.org/packages/blastula/versions/0.3.2) vas a poder renderizar un Rmd para usarlo como texto de tu mail. 
+
+Para ello, precisas definir en el YAML de tu .rmd el formato de salida como blastula::blastula_email, como se muestra:
+
+````md
+---
+title: Reporte 
+output: blastula::blastula_email
+--- 
+ 
+```{r}
+load("datos/berlin.Rdata")
+```
+Estimades,
+
+La cantidad de hospedajas en Berlin es `r nrow(berlin)`.
+
+Saludos,  
+R
+````
+
+
+
+
+
+
+---
+# mails desde R
+
+- Este documento Rmd lo renderizaremos con la funcion **blastula::render_email()**
+&lt;br&gt;&lt;br&gt;
+--
+
+- y luego lo podemos enviar con **blastula::smtp_send()**
+&lt;br&gt;&lt;br&gt;
+--
+
+- **smtp_send()** va a precisar tu mail y tus credenciales.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Si usas *RStudio Connect*, podes ver otros [ejemplos](https://solutions.rstudio.com/r/blastula/), para automatizar, condicionales, y parametrizar mails.
+
+---
+# mails desde R
+
+
+```r
+library(blastula)
+mail &lt;- render_email("texto_mail.rmd")
+
+# Mandarlo por SMTP usando credenciales
+mail %&gt;%
+  smtp_send(
+    to = "juan_perez@example.com",
+    from = "yo@example.net",
+    subject = "Reporte Berlin",
+    credentials = creds_file("mail_creds")
+  )
+```
+
+
+---
+# Artículos
+
+Por ejemplo con la librería **rticles** podemos tener una plantilla...
+
+![](img_more/rticles.png) 
+---
+# Artículos
+
+
+```r
+rmarkdown::draft(
+    "MiArticulo", template = "rjournal", package = "rticles"
+)
+```
+
+
+```r
+rmarkdown::draft(
+    "MiOtroArticulo", template = "plos_article", package = "rticles"
+)
+```
+
+---
+# blogdown
+
+Con la librería **blogdown** tendremos un inicio rápido a una estructura, al generar una nueva carpeta donde alojar la plantilla:
+
+- Por menú: *File -&gt; New Project -&gt; New Directory -&gt; Website using blogdown*
+&lt;br&gt;&lt;br&gt;
+- O por consola con: *blogdown::new_site()*
+&lt;br&gt;&lt;br&gt;
+-Más detalles [aquí](https://bookdown.org/yihui/blogdown/get-started.html)
+
+---
+# bookdown
+
+Con la librería **bookdown** tendremos un inicio rápido a una estructura de secciones como las que mencionamos al principio, para ello hay que generar una nueva carpeta donde alojar la plantilla:
+
+- Por menú: *File -&gt; New Project -&gt; New Directory -&gt; Book Project using bookdown*
+&lt;br&gt;&lt;br&gt;
+- O por consola con: *bookdown:::bookdown_skeleton('tu-libro-dir')*
+&lt;br&gt;&lt;br&gt;
+-Más detalles [aquí](https://bookdown.org/yihui/bookdown/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

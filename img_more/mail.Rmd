@@ -1,0 +1,14 @@
+---
+title: Reporte 
+output: blastula::blastula_email
+--- 
+ 
+```{r}
+load("datos/berlin.Rdata")
+```
+Estimades,
+
+La cantidad de hospedajas en Berlin es `r nrow(berlin)`.
+
+Saludos,  
+R
